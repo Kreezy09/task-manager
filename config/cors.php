@@ -19,7 +19,11 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000'), 'http://localhost:8080'],
+    'allowed_origins' => [
+        env('FRONTEND_URL', 'http://localhost:3000'),
+        'http://localhost:8080',
+        'https://task-manager-a9a6ajcwgedhc7db.canadacentral-01.azurewebsites.net',
+    ],
 
     'allowed_origins_patterns' => [],
 
