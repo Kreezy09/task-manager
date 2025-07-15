@@ -60,9 +60,11 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'user_id' => 'required|exists:users,id',
-            'status' => 'required|in:pending,in_progress,completed',
+            // 'status' => 'required|in:pending,in_progress,completed', // Remove status from validation
             'deadline' => 'nullable|date',
         ]);
+
+        $validated['status'] = 'pending'; // Force status to pending
 
         $task = Task::create($validated);
 
@@ -98,16 +100,34 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        // Users can only update their own tasks, admins can update all
-        if (!auth()->user()->is_admin && $task->user_id !== auth()->id()) {
+        $user = auth()->user();
+        $isAssignedUser = $task->user_id === $user->id;
+        $isAdmin = $user->is_admin;
+
+        // Only assigned user or admin can update, but with restrictions
+        if (!$isAdmin && !$isAssignedUser) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
+        // If admin, forbid updating status
+        if ($isAdmin && $request->has('status')) {
+            return response()->json(['message' => 'Admins cannot update task status'], 403);
+        }
+
+        // If assigned user, only allow status update
+        if ($isAssignedUser && !$isAdmin) {
+            $validated = $request->validate([
+                'status' => 'required|in:pending,in_progress,completed',
+            ]);
+            $task->update(['status' => $validated['status']]);
+            return response()->json($task->load('user'));
+        }
+
+        // If admin, allow updating other fields except status
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
             'description' => 'sometimes|required|string',
             'user_id' => 'sometimes|required|exists:users,id',
-            'status' => 'sometimes|required|in:pending,in_progress,completed',
             'deadline' => 'sometimes|nullable|date',
         ]);
 
