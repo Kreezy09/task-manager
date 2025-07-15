@@ -61,7 +61,7 @@
                         required
                     />
                 </div>
-                <div>
+                <div v-if="!user.is_admin">
                     <label class="block text-sm font-medium text-gray-700 mb-1"
                         >Status</label
                     >
@@ -136,6 +136,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        user: {
+            type: Object,
+            required: true,
+        },
     },
     data() {
         return {
@@ -156,6 +160,11 @@ export default {
             this.isSubmitting = true;
             this.emailWarning = false;
             this.emailError = null;
+
+            // Force status to pending for admins
+            if (this.user.is_admin) {
+                this.newTask.status = "pending";
+            }
 
             try {
                 const response = await axios.post("/api/tasks", this.newTask);
@@ -205,7 +214,7 @@ export default {
                 description: "",
                 user_id: "",
                 deadline: "",
-                status: "pending",
+                status: this.user.is_admin ? "pending" : "pending",
             };
             this.emailWarning = false;
             this.emailError = null;

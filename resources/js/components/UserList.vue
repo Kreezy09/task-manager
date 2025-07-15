@@ -30,7 +30,7 @@
                     />
                 </div>
                 <div class="flex items-center space-x-3">
-                    <label class="flex items-center">
+                    <!-- <label class="flex items-center">
                         <input
                             v-model="newUser.is_admin"
                             type="checkbox"
@@ -39,7 +39,7 @@
                         <span class="ml-2 text-sm text-gray-700"
                             >Admin User</span
                         >
-                    </label>
+                    </label> -->
                     <button
                         type="submit"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

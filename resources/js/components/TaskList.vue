@@ -92,7 +92,10 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-2">
+                    <div
+                        class="flex items-center space-x-2"
+                        v-if="!user.is_admin"
+                    >
                         <select
                             v-model="task.status"
                             @change="updateTaskStatus(task)"
@@ -148,6 +151,10 @@ export default {
         tasks: {
             type: Array,
             default: () => [],
+        },
+        user: {
+            type: Object,
+            required: true,
         },
     },
     data() {

@@ -54,6 +54,7 @@
                             </h3>
                             <task-form
                                 :users="users"
+                                :user="user"
                                 @task-created="loadTasks"
                             />
                         </div>
@@ -67,7 +68,11 @@
                     <h2 class="text-lg font-medium text-gray-900 mb-4">
                         My Tasks
                     </h2>
-                    <task-list :tasks="userTasks" @task-updated="loadTasks" />
+                    <task-list
+                        :tasks="userTasks"
+                        :user="user"
+                        @task-updated="loadTasks"
+                    />
                 </div>
             </div>
         </div>
