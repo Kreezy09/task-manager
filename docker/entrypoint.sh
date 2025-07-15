@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# Run migrations and cache config
+# Run cache config
 php artisan config:cache
 php artisan route:cache
 
